@@ -20,6 +20,13 @@ app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
+// Route for /urls.json endpoint
+app.get("/urls.json", (req, res) => {
+
+  // Send urlDatabase object as a JSON response to the client
+  res.json(urlDatabase);
+});
+
 // Start express server and listen on specified port
 app.listen(PORT, () => {
 
