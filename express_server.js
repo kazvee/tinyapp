@@ -23,6 +23,16 @@ app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
+// Route for /urls/:id endpoint (note that :id is a route parameter)
+app.get("/urls/:id", (req, res) => {
+
+  // Object to pass data for a single URL to the template
+  const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id] };
+
+  // Pass data for a single URL to the template
+  res.render("urls_show", templateVars);
+});
+
 // Route for /urls.json endpoint
 app.get("/urls.json", (req, res) => {
 
