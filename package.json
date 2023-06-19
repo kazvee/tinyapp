@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/karvok/tinyapp/issues"
   },
-  "homepage": "https://github.com/karvok/tinyapp#readme"
+  "homepage": "https://github.com/karvok/tinyapp#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
