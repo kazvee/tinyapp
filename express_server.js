@@ -7,6 +7,9 @@ const app = express();
 // Define base URL as http://localhost:8080
 const PORT = 8080;
 
+// Configure app to use ejs as the templating engine
+app.set("view engine", "ejs");
+
 // Object containing shortened URLs
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
