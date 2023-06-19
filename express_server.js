@@ -27,6 +27,12 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+// Route for /hello endpoint
+app.get("/hello", (req, res) => {
+  // Send response with HTML content to client
+  res.send("<html><body>Hello <b>World</b></body></html>\n");
+});
+
 // Start express server and listen on specified port
 app.listen(PORT, () => {
 
