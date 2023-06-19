@@ -30,8 +30,19 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+// Route for /urls endpoint
+app.get("/urls", (req, res) => {
+
+  // Object to pass data to the template
+  const templateVars = { urls: urlDatabase };
+
+  // Pass URL data to the template
+  res.render("urls_index", templateVars);
+});
+
 // Route for /hello endpoint
 app.get("/hello", (req, res) => {
+
   // Send response with HTML content to client
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
