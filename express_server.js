@@ -23,6 +23,13 @@ app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
+// Route for /urls/new endpoint
+app.get("/urls/new", (req, res) => {
+
+  // Find the urls_new template and send it to the browser
+  res.render("urls_new");
+});
+
 // Route for /urls/:id endpoint (note that :id is a route parameter)
 app.get("/urls/:id", (req, res) => {
 
