@@ -16,6 +16,9 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+// Middleware to parse the request body data from a Buffer into human-readable string
+app.use(express.urlencoded({ extended: true }));
+
 // Route handler for root path '/'
 app.get("/", (req, res) => {
 
@@ -62,6 +65,16 @@ app.get("/hello", (req, res) => {
 
   // Send response with HTML content to client
   res.send("<html><body>Hello <b>World</b></body></html>\n");
+});
+
+// POST route for /urls endpoint to receive new URL form submission
+app.post("/urls", (req, res) => {
+
+  // Log the POST request body to the console
+  console.log(req.body);
+
+  // Respond with 'OK'
+  res.send("OK! 😀");
 });
 
 // Start express server and listen on specified port
