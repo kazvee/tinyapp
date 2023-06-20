@@ -16,6 +16,19 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+// Generate a string of 6 random alphanumeric characters (a-z, A-Z, and 0-9)
+const generateRandomString = () => {
+  let result = '';
+  let characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let length = characters.length;
+  // Loop through the characters string to generate a length of 6
+  for (let i = 0; i < 6; i++) {
+    // Select a random character from the characters string
+    result += characters.charAt(Math.floor(Math.random() * length));
+  }
+  return result;
+};
+
 // Middleware to parse the request body data from a Buffer into human-readable string
 app.use(express.urlencoded({ extended: true }));
 
@@ -73,8 +86,11 @@ app.post("/urls", (req, res) => {
   // Log the POST request body to the console
   console.log(req.body);
 
-  // Respond with 'OK'
-  res.send("OK! 😀");
+  // Use generateRandomString function to generate short URL ID
+  let responseString = generateRandomString();
+
+  // Respond with Short URL ID
+  res.send(`Your Short URL ID is: ${responseString} 😀`);
 });
 
 // Start express server and listen on specified port
