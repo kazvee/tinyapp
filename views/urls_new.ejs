@@ -22,8 +22,10 @@
     <%- include('partials/_header') %>
     <main style="margin: 1em;">
       <h3>Create TinyURL</h3>
+      <!-- When the form is submitted, it will make a POST request to /urls -->
       <form class="form-inline" action="/urls" method="POST">
         <div class="form-group mb-2">
+          <!-- The request body will contain one URL-encoded name-value pair with the name longURL -->
           <label for="longURL">Enter a URL:</label>
           <input
             class="form-control"
