@@ -56,6 +56,16 @@ app.get("/urls/:id", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
+// Route for /u/:id endpoint (note that :id is a route parameter)
+app.get("/u/:id", (req, res) => {
+
+  // Get the longURL value associated with the Short URL (id) in the urlDatabase object
+  const longURL = urlDatabase[req.params.id];
+
+  // Redirect user to the longURL website
+  res.redirect(longURL);
+});
+
 // Route for /urls.json endpoint
 app.get("/urls.json", (req, res) => {
 
