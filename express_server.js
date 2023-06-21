@@ -92,8 +92,8 @@ app.post("/urls", (req, res) => {
   // Assign longURL as the value of the newly-generated Short URL ID key in the urlDatabase object
   urlDatabase[id] = longURL;
 
-  // Respond with Short URL ID and confirmation of the user-provided longURL
-  res.send(`Your Short URL ID is: ${id} for long URL ${longURL} 😀\n`);
+  // Redirect user to /urls/:id
+  res.redirect(`/urls/${id}`);
 });
 
 // Start express server and listen on specified port
