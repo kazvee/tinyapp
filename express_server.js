@@ -83,14 +83,17 @@ app.get("/hello", (req, res) => {
 // POST route for /urls endpoint to receive new URL form submission
 app.post("/urls", (req, res) => {
 
-  // Log the POST request body to the console
-  console.log(req.body);
+  // Set longURL to be the POST request body
+  const longURL = req.body.longURL;
 
   // Use generateRandomString function to generate short URL ID
-  let responseString = generateRandomString();
+  const id = generateRandomString();
 
-  // Respond with Short URL ID
-  res.send(`Your Short URL ID is: ${responseString} 😀`);
+  // Assign longURL as the value of the newly-generated Short URL ID key in the urlDatabase object
+  urlDatabase[id] = longURL;
+
+  // Respond with Short URL ID and confirmation of the user-provided longURL
+  res.send(`Your Short URL ID is: ${id} for long URL ${longURL} 😀\n`);
 });
 
 // Start express server and listen on specified port
