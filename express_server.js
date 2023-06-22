@@ -106,6 +106,19 @@ app.post("/urls", (req, res) => {
   res.redirect(`/urls/${id}`);
 });
 
+// POST route for /urls/:id/delete to handle short URL ID deletion
+app.post(`/urls/:id/delete`, (req, res) => {
+
+  // Set Short URL ID to be the POST request body
+  const id = req.params.id;
+
+  // Delete the specified Short URL ID
+  delete urlDatabase[id];
+
+  // Redirect user to /urls
+  res.redirect(`/urls`);
+});
+
 // Start express server and listen on specified port
 app.listen(PORT, () => {
 
