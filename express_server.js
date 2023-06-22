@@ -119,6 +119,22 @@ app.post(`/urls/:id/delete`, (req, res) => {
   res.redirect(`/urls`);
 });
 
+// POST route for /urls/:id to handle editing of Short URL ID details
+app.post(`/urls/:id`, (req, res) => {
+
+  // Get the id from the route parameter
+  const id = req.params.id;
+
+  // Assign longURL value to be the editURL value received from the POST request body
+  const longURL = req.body.newURL;
+
+  // Update the longUrl value in the database with the new value
+  urlDatabase[id] = longURL;
+
+  // Redirect user to /urls
+  res.redirect(`/urls`);
+});
+
 // Start express server and listen on specified port
 app.listen(PORT, () => {
 
