@@ -135,6 +135,19 @@ app.post(`/urls/:id`, (req, res) => {
   res.redirect(`/urls`);
 });
 
+// POST route for /login
+app.post('/login', (req, res) => {
+
+  // Get the username from the request body
+  const username = req.body.username;
+
+  // Set a cookie named username to the value for username submitted in the request body
+  res.cookie('username', username);
+
+  // Redirect user to /urls
+  res.redirect('/urls');
+});
+
 // Start express server and listen on specified port
 app.listen(PORT, () => {
 
