@@ -1,6 +1,9 @@
 // Import express library
 const express = require("express");
 
+// Import cookie-parser
+const cookieParser = require('cookie-parser');
+
 // Define app as an instance of express
 const app = express();
 
@@ -32,6 +35,9 @@ const generateRandomString = () => {
 // Middleware to parse the request body data from a Buffer into human-readable string
 app.use(express.urlencoded({ extended: true }));
 
+// Middleware to parse cookie requests into human-readable details
+app.use(cookieParser());
+
 // Route handler for root path '/'
 app.get("/", (req, res) => {
 
@@ -41,16 +47,25 @@ app.get("/", (req, res) => {
 
 // Route for /urls/new endpoint
 app.get("/urls/new", (req, res) => {
+  const templateVars = {
+    // Pass in the username (using the cookie value) to the url_index template
+    username: req.cookies["username"],
+  };
 
   // Find the urls_new template and send it to the browser
-  res.render("urls_new");
+  res.render("urls_new", templateVars);
 });
 
 // Route for /urls/:id endpoint (note that :id is a route parameter)
 app.get("/urls/:id", (req, res) => {
 
   // Object to pass data for a single URL to the template
-  const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id] };
+  const templateVars = {
+    // Pass in the username (using the cookie value) to the url_index template
+    username: req.cookies["username"],
+    id: req.params.id,
+    longURL: urlDatabase[req.params.id]
+  };
 
   // Pass data for a single URL to the template
   res.render("urls_show", templateVars);
@@ -77,7 +92,11 @@ app.get("/urls.json", (req, res) => {
 app.get("/urls", (req, res) => {
 
   // Object to pass data to the template
-  const templateVars = { urls: urlDatabase };
+  const templateVars = {
+    // Pass in the username (using the cookie value) to the url_index template
+    username: req.cookies["username"],
+    urls: urlDatabase
+  };
 
   // Pass URL data to the template
   res.render("urls_index", templateVars);
