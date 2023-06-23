@@ -167,6 +167,16 @@ app.post('/login', (req, res) => {
   res.redirect('/urls');
 });
 
+// POST route for /logout
+app.post('/logout', (req, res) => {
+
+  // Clear the `username` cookie
+  res.clearCookie('username');
+
+  // Redirect user to /urls
+  res.redirect('/urls');
+});
+
 // Start express server and listen on specified port
 app.listen(PORT, () => {
 
