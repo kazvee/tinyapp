@@ -199,6 +199,26 @@ app.post('/logout', (req, res) => {
   res.redirect('/urls');
 });
 
+// Route to handle new user registration
+app.post('/register', (req, res) => {
+  // Get new user email address from request body
+  const email = req.body.email;
+  // Get new user password from request body
+  const password = req.body.password;
+  // Use generateRandomString function to generate random User ID
+  const userID = generateRandomString();
+  // Add the new user object & data to the global `users` object
+  users[userID] = {
+    id: userID,
+    email,
+    password
+  };
+  // Set cookie named `user_id` to the value for the newly-generated User ID
+  res.cookie('user_id', userID);
+  // Redirect user to /urls
+  res.redirect('/urls');
+});
+
 //================
 // END OF ROUTES
 //================
