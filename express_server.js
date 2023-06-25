@@ -21,6 +21,20 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+// Object to store and access the users in the app
+const users = {
+  userRandomID: {
+    id: "user1RandomID",
+    email: "user@example.com",
+    password: "yellow-snake-bird",
+  },
+  user2RandomID: {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "washing-machine-soap",
+  },
+};
+
 //=============
 //  FUNCTIONS
 //=============
