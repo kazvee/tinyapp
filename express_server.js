@@ -118,6 +118,17 @@ app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
+// Route for /register endpoint for new user signup
+app.get("/register", (req, res) => {
+  // Object to pass data to the template
+  const templateVars = {
+    // Pass in the username (using the cookie value) to the url_index template
+    username: req.cookies["username"],
+  };
+  // Find the register.ejs template and send it to the browser
+  res.render("register", templateVars);
+});
+
 //===============
 //  POST ROUTES
 //===============
