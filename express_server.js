@@ -80,8 +80,8 @@ app.get("/", (req, res) => {
 // Route for /urls/new endpoint
 app.get("/urls/new", (req, res) => {
   const templateVars = {
-    // Pass in the username (using the cookie value) to the url_index template
-    username: req.cookies["username"],
+    // Lookup the specific `user` object in the `users` object using the `user_id` cookie value & pass the entire object to templates via templateVars
+    user: users[req.cookies["user_id"]]
   };
   // Find the urls_new template and send it to the browser
   res.render("urls_new", templateVars);
@@ -91,8 +91,8 @@ app.get("/urls/new", (req, res) => {
 app.get("/urls/:id", (req, res) => {
   // Object to pass data for a single URL to the template
   const templateVars = {
-    // Pass in the username (using the cookie value) to the url_index template
-    username: req.cookies["username"],
+    // Lookup the specific `user` object in the `users` object using the `user_id` cookie value & pass the entire object to templates via templateVars
+    user: users[req.cookies["user_id"]],
     id: req.params.id,
     longURL: urlDatabase[req.params.id]
   };
@@ -118,8 +118,8 @@ app.get("/urls.json", (req, res) => {
 app.get("/urls", (req, res) => {
   // Object to pass data to the template
   const templateVars = {
-    // Pass in the username (using the cookie value) to the url_index template
-    username: req.cookies["username"],
+    // Lookup the specific `user` object in the `users` object using the `user_id` cookie value & pass the entire object to templates via templateVars
+    user: users[req.cookies["user_id"]],
     urls: urlDatabase
   };
   // Pass URL data to the template
@@ -136,8 +136,8 @@ app.get("/hello", (req, res) => {
 app.get("/register", (req, res) => {
   // Object to pass data to the template
   const templateVars = {
-    // Pass in the username (using the cookie value) to the url_index template
-    username: req.cookies["username"],
+    // Lookup the specific `user` object in the `users` object using the `user_id` cookie value & pass the entire object to templates via templateVars
+    user: users[req.cookies["user_id"]]
   };
   // Find the register.ejs template and send it to the browser
   res.render("register", templateVars);
