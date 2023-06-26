@@ -157,6 +157,17 @@ app.get("/register", (req, res) => {
   res.render("register", templateVars);
 });
 
+// Route for /login endpoint for existing user signin
+app.get("/login", (req, res) => {
+  // Object to pass data to the template
+  const templateVars = {
+    // Lookup the specific `user` object in the `users` object using the `user_id` cookie value & pass the entire object to templates via templateVars
+    user: users[req.cookies["user_id"]]
+  };
+  // Find the login.ejs template and send it to the browser
+  res.render("login", templateVars);
+});
+
 //===============
 //  POST ROUTES
 //===============
