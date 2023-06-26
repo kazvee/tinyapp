@@ -20,14 +20,14 @@
     </div>
     <% if (user) { %>
       <div class="nav-item mr-2">Logged in as: <%= user.email %></div>
-      <form method="POST" action="/logout" class="form-inline">
-      <button type="submit" class="btn btn-outline-dark">Logout</button>
-      </form>
+          <form method="POST" action="/logout" class="form-inline">
+            <button type="submit" class="btn btn-outline-dark">Logout</button>
+          </form>      
       <% } else { %>
-      <form method="POST" action="/login" class="form-inline">
-      <input class="form-control mr-2" type="text" name="username" id="username" placeholder="Username">
-      <button type="submit" class="btn btn-outline-dark">Login</button>
-      </form>
+        <div class="navbar-nav">
+          <a class="nav-item nav-link" href="/login">Login</a>
+          <a class="nav-item nav-link" href="/register">Register</a>
+        </div>
       <% } %>    
   </nav>
 </header>
