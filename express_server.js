@@ -206,12 +206,24 @@ app.post(`/urls/:id`, (req, res) => {
   res.redirect(`/urls`);
 });
 
-// Route to handle user Login
+// Route to handle user login
 app.post('/login', (req, res) => {
-  // Get username from request body
-  const username = req.body.username;
-  // Set cookie named `username` to the value for username submitted in request body
-  res.cookie('username', username);
+  // Get email address from request body
+  const email = req.body.email;
+  // Get password from request body
+  const password = req.body.password;
+  // Lookup the specific `user` object in the `users` object using the entered email address
+  const user = getUserByEmail(email);
+  // Handle error if `user` object does not exist
+  if (!user) {
+    res.status(403).send(`<html><body>Response Status Code: ${res.statusCode}<br>No account found with the email address provided.<br> Please click <a href='/register'>HERE</a> to register! 🙂</body></html>\n`);
+  }
+  // Handle error if `user` object exists BUT the entered password does not match the existing password value
+  if (user && password !== user.password) {
+    res.status(403).send(`<html><body>Response Status Code: ${res.statusCode}<br>Login failed. Please doublecheck the credentials provided.<br>Please click <a href='/login'>HERE</a> to login, or <a href='/register'>HERE</a> to register for a new account! 🙂</body></html>\n`);
+  }
+  // If `user` exists and entered password is a match, set cookie named `user_id` to the value for the user's `id`
+  res.cookie('user_id', user.id);
   // Redirect user to /urls
   res.redirect('/urls');
 });
