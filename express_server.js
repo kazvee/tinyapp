@@ -52,6 +52,20 @@ const generateRandomString = () => {
   return result;
 };
 
+// Check if email address already exists in the `users` object, taking in `email` as a parameter
+const getUserByEmail = (email) => {
+  // Loop through the users object
+  for (const userKey in users) {
+    const user = users[userKey];
+    // If email address already exists in the `users` object, return the entire `user` object
+    if (email === user.email) {
+      return user;
+    }
+  }
+  // If email not found in the `users` object
+  return null;
+};
+
 //==============
 //  MIDDLEWARE
 //==============
