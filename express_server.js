@@ -228,12 +228,12 @@ app.post('/login', (req, res) => {
   res.redirect('/urls');
 });
 
-// Route to handle user Logout
+// Route to handle user logout
 app.post('/logout', (req, res) => {
-  // Clear the `username` cookie
-  res.clearCookie('username');
+  // Clear the `user_id` cookie
+  res.clearCookie('user_id');
   // Redirect user to /urls
-  res.redirect('/urls');
+  res.redirect('/login');
 });
 
 // Route to handle new user registration
