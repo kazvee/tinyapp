@@ -219,6 +219,14 @@ app.post('/register', (req, res) => {
   const email = req.body.email;
   // Get new user password from request body
   const password = req.body.password;
+  // Handle error if user enters empty strings for email and/or password
+  if (!email || !password) {
+    res.status(400).send(`<html><body>Response Status Code: ${res.statusCode}<br>Please enter a valid email address and a secure password.<br>Click <a href='/register'>HERE</a> to try again! 🙂</body></html>\n`);
+  }
+  // Handle error if user enters an email address that already exists in the `users` object
+  if (getUserByEmail(email)) {
+    res.status(400).send(`<html><body>Response Status Code: ${res.statusCode}<br>An account already exists for the email address provided.<br>Please click <a href='/login'>HERE</a> to login! 🙂</body></html>\n`);
+  }
   // Use generateRandomString function to generate random User ID
   const userID = generateRandomString();
   // Add the new user object & data to the global `users` object
