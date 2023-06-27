@@ -129,7 +129,7 @@ app.get('/urls/:id', (req, res) => {
     // & pass the entire object to templates via templateVars
     user: users[req.cookies['user_id']],
     id: req.params.id,
-    longURL: urlDatabase[req.params.id]
+    longURL: urlDatabase[req.params.id].longURL
   };
   // Pass data for a single URL to the template
   res.render('urls_show', templateVars);
@@ -149,7 +149,7 @@ app.get('/u/:id', (req, res) => {
     ${htmlBodyEnd}`);
   }
   // Get longURL value associated with Short URL 'id' in the urlDatabase object
-  const longURL = urlDatabase[req.params.id];
+  const longURL = urlDatabase[req.params.id].longURL;
   // Redirect user to the actual website (longURL) associated to the Short URL ID
   res.redirect(longURL);
 });
@@ -228,8 +228,11 @@ app.post('/urls', (req, res) => {
   const longURL = req.body.longURL;
   // Use generateRandomString function to generate short URL ID
   const id = generateRandomString();
-  // Assign 'longURL' as value of newly-generated Short URL ID key 'id' in the urlDatabase object
-  urlDatabase[id] = longURL;
+  // Store 'longURL' and 'userID' in the object associated with the 'id' key within the urlDatabase object
+  urlDatabase[id] = {
+    longURL,
+    userID: req.cookies.user_id
+  };
   // Redirect user to /urls/:id
   res.redirect(`/urls/${id}`);
 });
@@ -251,7 +254,7 @@ app.post(`/urls/:id`, (req, res) => {
   // Assign longURL value to be the editURL value received from the POST request body
   const longURL = req.body.newURL;
   // Update the longUrl value in the database with the newly-provided longURL value
-  urlDatabase[id] = longURL;
+  urlDatabase[id].longURL = longURL;
   // Redirect user to /urls
   res.redirect('/urls');
 });
