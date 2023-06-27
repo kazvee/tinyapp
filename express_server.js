@@ -131,6 +131,17 @@ app.get('/urls/:id', (req, res) => {
 
 // Route for /u/:id endpoint (note that :id is a route parameter)
 app.get('/u/:id', (req, res) => {
+  // Check if requested Short URL ID exists in the database
+  if (!urlDatabase[req.params.id]) {
+    // If not, send error message to user
+    return res.status(404).send(`
+    ${htmlBodyStart}
+    ${textStyle}
+    Response Status Code: ${res.statusCode}<br><br>
+    The Short URL ID provided (${req.params.id}) does not exist.<br><br>
+    Please try again.
+    ${htmlBodyEnd}`);
+  }
   // Get longURL value associated with Short URL 'id' in the urlDatabase object
   const longURL = urlDatabase[req.params.id];
   // Redirect user to the actual website (longURL) associated to the Short URL ID
