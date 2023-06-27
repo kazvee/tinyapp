@@ -216,11 +216,11 @@ app.post('/login', (req, res) => {
   const user = getUserByEmail(email);
   // Handle error if `user` object does not exist
   if (!user) {
-    res.status(403).send(`<html><body>Response Status Code: ${res.statusCode}<br>No account found with the email address provided.<br> Please click <a href='/register'>HERE</a> to register! 🙂</body></html>\n`);
+    return res.status(403).send(`<html><body>Response Status Code: ${res.statusCode}<br>No account found with the email address provided.<br> Please click <a href='/register'>HERE</a> to register! 🙂</body></html>\n`);
   }
   // Handle error if `user` object exists BUT the entered password does not match the existing password value
   if (user && password !== user.password) {
-    res.status(403).send(`<html><body>Response Status Code: ${res.statusCode}<br>Login failed. Please doublecheck the credentials provided.<br>Please click <a href='/login'>HERE</a> to login, or <a href='/register'>HERE</a> to register for a new account! 🙂</body></html>\n`);
+    return res.status(403).send(`<html><body>Response Status Code: ${res.statusCode}<br>Login failed. Please doublecheck the credentials provided.<br>Please click <a href='/login'>HERE</a> to login, or <a href='/register'>HERE</a> to register for a new account! 🙂</body></html>\n`);
   }
   // If `user` exists and entered password is a match, set cookie named `user_id` to the value for the user's `id`
   res.cookie('user_id', user.id);
@@ -244,11 +244,11 @@ app.post('/register', (req, res) => {
   const password = req.body.password;
   // Handle error if user enters empty strings for email and/or password
   if (!email || !password) {
-    res.status(400).send(`<html><body>Response Status Code: ${res.statusCode}<br>Please enter a valid email address and a secure password.<br>Click <a href='/register'>HERE</a> to try again! 🙂</body></html>\n`);
+    return res.status(400).send(`<html><body>Response Status Code: ${res.statusCode}<br>Please enter a valid email address and a secure password.<br>Click <a href='/register'>HERE</a> to try again! 🙂</body></html>\n`);
   }
   // Handle error if user enters an email address that already exists in the `users` object
   if (getUserByEmail(email)) {
-    res.status(400).send(`<html><body>Response Status Code: ${res.statusCode}<br>An account already exists for the email address provided.<br>Please click <a href='/login'>HERE</a> to login! 🙂</body></html>\n`);
+    return res.status(400).send(`<html><body>Response Status Code: ${res.statusCode}<br>An account already exists for the email address provided.<br>Please click <a href='/login'>HERE</a> to login! 🙂</body></html>\n`);
   }
   // Use generateRandomString function to generate random User ID
   const userID = generateRandomString();
