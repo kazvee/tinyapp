@@ -159,6 +159,11 @@ app.get('/register', (req, res) => {
     // & pass the entire object to templates via templateVars
     user: users[req.cookies['user_id']]
   };
+  // If user is already logged in with cookie
+  if (req.cookies.user_id) {
+    // Redirect them to /urls
+    return res.redirect(`/urls`);
+  }
   // Find the register.ejs template and send it to the browser
   res.render('register', templateVars);
 });
