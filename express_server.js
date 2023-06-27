@@ -196,6 +196,17 @@ app.get('/login', (req, res) => {
 
 // Route for /urls endpoint to receive new URL form submission
 app.post('/urls', (req, res) => {
+  // If user is not logged in with cookie
+  if (!req.cookies.user_id) {
+    // Advise user that they must be logged-in to create new Short URL
+    return res.status(401).send(`
+    ${htmlBodyStart}
+    ${textStyle}
+    Response Status Code: ${res.statusCode}<br><br>
+    Must be logged in to create a new short URL.<br><br>
+    Please click ${loginLink} to login, or ${registerLink} to register for a new account! 🙂
+    ${htmlBodyEnd}`);
+  }
   // Set longURL to be the POST request body
   const longURL = req.body.longURL;
   // Use generateRandomString function to generate short URL ID
