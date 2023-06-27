@@ -219,6 +219,16 @@ app.post('/login', (req, res) => {
   const email = req.body.email;
   // Get password from request body
   const password = req.body.password;
+  // Handle error if user enters empty strings for email and/or password
+  if (!email || !password) {
+    return res.status(403).send(`
+    ${htmlBodyStart}
+    ${textStyle}
+    Response Status Code: ${res.statusCode}<br><br>
+    Login failed. Please doublecheck the credentials provided.<br><br>
+    Please click ${loginLink} to login, or ${registerLink} to register for a new account! 🙂
+    ${htmlBodyEnd}`);
+  }
   // Lookup the specific 'user' object in the 'users' object using the entered email address
   const user = getUserByEmail(email);
   // Handle error if 'user' object does not exist
