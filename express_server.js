@@ -22,7 +22,7 @@ const urlDatabase = {
   '9sm5xK': 'http://www.google.com'
 };
 
-// Object to store and access the users in the app
+// TEST DATA ONLY - Object to store & access user data
 const users = {
   userRandomID: {
     id: 'user1RandomID',
@@ -35,6 +35,13 @@ const users = {
     password: 'washing-machine-soap',
   },
 };
+
+// Helper objects to add text styling for login & register error message pages
+const htmlBodyStart = '<html><body>';
+const textStyle = `<p style='font-family: Verdana, sans-serif; font-size: 16px'>`;
+const loginLink = `<a href='/login'>HERE</a>`;
+const registerLink = `<a href='/register'>HERE</a>`;
+const htmlBodyEnd = `</body></html>\n`;
 
 //=============
 //  FUNCTIONS
@@ -216,16 +223,23 @@ app.post('/login', (req, res) => {
   const user = getUserByEmail(email);
   // Handle error if 'user' object does not exist
   if (!user) {
-    return res.status(403).send(`<html><body>Response Status Code: ${res.statusCode}<br>
-    No account found with the email address provided.<br>
-    Please click <a href='/register'>HERE</a> to register! 🙂</body></html>\n`);
+    return res.status(403).send(`
+    ${htmlBodyStart}
+    ${textStyle}
+    Response Status Code: ${res.statusCode}<br><br>
+    No account found with the email address provided.<br><br>
+    Please click ${registerLink} to register! 🙂
+    ${htmlBodyEnd}`);
   }
   // Handle error if 'user' object exists BUT entered password does not match existing password value
   if (user && password !== user.password) {
-    return res.status(403).send(`<html><body>Response Status Code: ${res.statusCode}<br>
-    Login failed. Please doublecheck the credentials provided.<br>
-    Please click <a href='/login'>HERE</a> to login, or <a href='/register'>HERE</a> 
-    to register for a new account! 🙂</body></html>\n`);
+    return res.status(403).send(`
+    ${htmlBodyStart}
+    ${textStyle}
+    Response Status Code: ${res.statusCode}<br><br>
+    Login failed. Please doublecheck the credentials provided.<br><br>
+    Please click ${loginLink} to login, or ${registerLink} to register for a new account! 🙂
+    ${htmlBodyEnd}`);
   }
   // If 'user' exists AND entered password is a match
   // set cookie named 'user_id' to the value for the 'id' of the user
@@ -250,15 +264,24 @@ app.post('/register', (req, res) => {
   const password = req.body.password;
   // Handle error if user enters empty strings for email and/or password
   if (!email || !password) {
-    return res.status(400).send(`<html><body>Response Status Code: ${res.statusCode}<br>
-    Please enter a valid email address and a secure password.<br>
-    Click <a href='/register'>HERE</a> to try again! 🙂</body></html>\n`);
+    return res.status(400).send(`
+    ${htmlBodyStart}
+    ${textStyle}
+    Response Status Code: ${res.statusCode}<br><br>
+    Please enter a valid email address and a secure password.<br><br>
+    Click ${registerLink} to try again! 🙂
+    ${htmlBodyEnd}`);
   }
+
   // Handle error if user enters an email address that already exists in the 'users' object
   if (getUserByEmail(email)) {
-    return res.status(400).send(`<html><body>Response Status Code: ${res.statusCode}<br>
-    An account already exists for the email address provided.<br>
-    Please click <a href='/login'>HERE</a> to login! 🙂</body></html>\n`);
+    return res.status(400).send(`
+    ${htmlBodyStart}
+    ${textStyle}
+    Response Status Code: ${res.statusCode}<br><br>
+    An account already exists for the email address provided.<br><br>
+    Please click ${loginLink} to login! 🙂
+    ${htmlBodyEnd}`);
   }
   // Use generateRandomString function to generate random User ID
   const userID = generateRandomString();
