@@ -106,6 +106,11 @@ app.get('/urls/new', (req, res) => {
     // & pass the entire object to templates via templateVars
     user: users[req.cookies['user_id']]
   };
+  // If user is not logged in with cookie
+  if (!req.cookies.user_id) {
+    // Redirect user to login
+    return res.redirect(`/login`);
+  }
   // Find the urls_new template and send it to the browser
   res.render('urls_new', templateVars);
 });
