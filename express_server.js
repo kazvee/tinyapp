@@ -15,11 +15,17 @@ const PORT = 8080;
 //  OBJECTS
 //===========
 
-// Object containing shortened URLs as key-value pairs
-// where key is 'id' for the Short URL ID and value is 'longURL' for the corresponding Long URL
+// Object containing shortened URLs
+// where key is 'id' and value is an object that has its own keys of 'longURL' and 'userID'
 const urlDatabase = {
-  'b2xVn2': 'http://www.lighthouselabs.ca',
-  '9sm5xK': 'http://www.google.com'
+  b6UTxQ: {
+    longURL: "https://www.tsn.ca",
+    userID: "aJ48lW",
+  },
+  i3BoGr: {
+    longURL: "https://www.google.ca",
+    userID: "aJ48lW",
+  },
 };
 
 // TEST DATA ONLY - Object to store & access user data
