@@ -405,8 +405,8 @@ app.post('/login', (req, res) => {
     Please click ${registerLink} to register! 🙂
     ${htmlBodyEnd}`);
   }
-  // Handle error if 'user' object exists BUT entered password does not match existing password value
-  if (user && password !== user.password) {
+  // Handle error if 'user' object exists BUT entered password does not match existing hashed password value
+  if (user && !bcrypt.compareSync(password, user.password)) {
     return res.status(403).send(`
     ${htmlBodyStart}
     ${textStyle}
