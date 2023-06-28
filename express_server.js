@@ -312,6 +312,17 @@ app.post(`/urls/:id/delete`, (req, res) => {
 app.post(`/urls/:id`, (req, res) => {
   // Get the Short URL ID from the route parameter
   const id = req.params.id;
+  // If logged-in user does not own the URL 'id'
+  if (!urlsForUser(req.cookies.user_id)[id]) {
+    // Advise user they are not permitted to edit it
+    return res.status(403).send(`
+          ${htmlBodyStart}
+          ${textStyle}
+          Response Status Code: ${res.statusCode}<br><br>
+          You do not have permission to edit this URL.<br><br>
+          Please click <a href='/urls'>HERE</a> to access your owned URLs.
+          ${htmlBodyEnd}`);
+  }
   // Assign longURL value to be the editURL value received from the POST request body
   const longURL = req.body.newURL;
   // Update the longUrl value in the database with the newly-provided longURL value
