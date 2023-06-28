@@ -289,8 +289,19 @@ app.post('/urls', (req, res) => {
 
 // Route for /urls/:id/delete to handle short URL ID deletion
 app.post(`/urls/:id/delete`, (req, res) => {
-  // Set Short URL ID to be the POST request body
+  // Get the Short URL ID from the route parameter
   const id = req.params.id;
+  // Check if requested Short URL ID exists in the database
+  if (!urlDatabase[id]) {
+    // If not, send error message to user
+    return res.status(404).send(`
+      ${htmlBodyStart}
+      ${textStyle}
+      Response Status Code: ${res.statusCode}<br><br>
+      The Short URL ID provided (${req.params.id}) does not exist.<br><br>
+      Please try again.
+      ${htmlBodyEnd}`);
+  }
   // If logged-in user does not own the URL 'id'
   if (!urlsForUser(req.cookies.user_id)[id]) {
     // Advise user they are not permitted to delete it
