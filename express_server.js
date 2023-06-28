@@ -6,6 +6,8 @@
 const express = require('express');
 // Import cookie-parser
 const cookieParser = require('cookie-parser');
+// Import cookie-session
+const cookieSession = require('cookie-session');
 // Define app as an instance of express
 const app = express();
 // Define base URL with port number on which the server will listen as http://localhost:8080
@@ -108,6 +110,13 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 // Parse cookie requests into human-readable details and makes the values accessible
 app.use(cookieParser());
+// Configure app to use encrypted cookies
+app.use(cookieSession({
+  name: 'session',
+  keys: ['gudetama'],
+  // Cookie Options
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+}));
 
 //==========
 //  ROUTES
