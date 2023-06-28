@@ -10,6 +10,8 @@ const cookieParser = require('cookie-parser');
 const app = express();
 // Define base URL with port number on which the server will listen as http://localhost:8080
 const PORT = 8080;
+// Import bcryptjs to hash user passwords
+const bcrypt = require("bcryptjs");
 
 //===========
 //  OBJECTS
@@ -444,7 +446,6 @@ app.post('/register', (req, res) => {
     Click ${registerLink} to try again! 🙂
     ${htmlBodyEnd}`);
   }
-
   // Handle error if user enters an email address that already exists in the 'users' object
   if (getUserByEmail(email)) {
     return res.status(400).send(`
@@ -457,11 +458,13 @@ app.post('/register', (req, res) => {
   }
   // Use generateRandomString function to generate random User ID
   const userID = generateRandomString();
+  // Securely hash the password
+  const hashedPassword = bcrypt.hashSync(password, 10);
   // Add the new user object & data to the global 'users' object
   users[userID] = {
     id: userID,
     email,
-    password
+    password: hashedPassword
   };
   // Set cookie named 'user_id' to the value for the newly-generated User ID
   res.cookie('user_id', userID);
