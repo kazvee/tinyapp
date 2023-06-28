@@ -291,6 +291,17 @@ app.post('/urls', (req, res) => {
 app.post(`/urls/:id/delete`, (req, res) => {
   // Set Short URL ID to be the POST request body
   const id = req.params.id;
+  // If logged-in user does not own the URL 'id'
+  if (!urlsForUser(req.cookies.user_id)[id]) {
+    // Advise user they are not permitted to delete it
+    return res.status(403).send(`
+        ${htmlBodyStart}
+        ${textStyle}
+        Response Status Code: ${res.statusCode}<br><br>
+        You do not have permission to delete this URL.<br><br>
+        Please click <a href='/urls'>HERE</a> to access your owned URLs.
+        ${htmlBodyEnd}`);
+  }
   // Delete the specified Short URL ID
   delete urlDatabase[id];
   // Redirect user to /urls
