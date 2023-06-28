@@ -194,7 +194,8 @@ app.get('/urls', (req, res) => {
     // Lookup specific 'user' object in 'users' object using 'user_id' cookie value
     // & pass the entire object to templates via templateVars
     user: users[req.cookies['user_id']],
-    urls: urlDatabase
+    // Lookup the URLs belonging to this user, and pass them to the templates
+    urls: urlsForUser(req.cookies.user_id),
   };
   // Pass URL data to the template
   res.render('urls_index', templateVars);
