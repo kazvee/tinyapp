@@ -139,6 +139,17 @@ app.get('/urls/new', (req, res) => {
 
 // Route for /urls/:id endpoint (note that :id is a route parameter)
 app.get('/urls/:id', (req, res) => {
+  // If user is not logged in with cookie
+  if (!req.cookies.user_id) {
+    // Advise user that they must be logged-in to view /urls/:id
+    return res.status(401).send(`
+      ${htmlBodyStart}
+      ${textStyle}
+      Response Status Code: ${res.statusCode}<br><br>
+      Must be logged in to view this page.<br><br>
+      Please click ${loginLink} to login, or ${registerLink} to register for a new account! 🙂
+      ${htmlBodyEnd}`);
+  }
   // Object to pass data for a single URL to the template
   const templateVars = {
     // Lookup specific 'user' object in 'users' object using 'user_id' cookie value
