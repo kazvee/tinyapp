@@ -150,6 +150,17 @@ app.get('/urls/:id', (req, res) => {
       Please click ${loginLink} to login, or ${registerLink} to register for a new account! 🙂
       ${htmlBodyEnd}`);
   }
+  // If logged-in user does not own the URL 'id'
+  if (!urlsForUser(req.cookies.user_id)[req.params.id]) {
+    // Advise user they are not permitted to access it
+    return res.status(403).send(`
+      ${htmlBodyStart}
+      ${textStyle}
+      Response Status Code: ${res.statusCode}<br><br>
+      You do not have permission to access this URL.<br><br>
+      Please click <a href='/urls'>HERE</a> to access your owned URLs.
+      ${htmlBodyEnd}`);
+  }
   // Object to pass data for a single URL to the template
   const templateVars = {
     // Lookup specific 'user' object in 'users' object using 'user_id' cookie value
