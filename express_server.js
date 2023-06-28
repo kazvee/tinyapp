@@ -332,6 +332,17 @@ app.post(`/urls/:id/delete`, (req, res) => {
 
 // Route for /urls/:id to handle editing of Short URL ID details
 app.post(`/urls/:id`, (req, res) => {
+  // If user is not logged in with cookie
+  if (!req.cookies.user_id) {
+    // Advise user that they must be logged-in to edit a Short URL
+    return res.status(401).send(`
+          ${htmlBodyStart}
+          ${textStyle}
+          Response Status Code: ${res.statusCode}<br><br>
+          Must be logged in to edit a short URL.<br><br>
+          Please click ${loginLink} to login, or ${registerLink} to register for a new account! 🙂
+          ${htmlBodyEnd}`);
+  }
   // Get the Short URL ID from the route parameter
   const id = req.params.id;
   // Check if requested Short URL ID exists in the database
