@@ -12,6 +12,8 @@ const app = express();
 const PORT = 8080;
 // Import bcryptjs to hash user passwords
 const bcrypt = require("bcryptjs");
+// Import helper function
+const getUserByEmail = require('./helpers');
 
 //===========
 //  OBJECTS
@@ -66,21 +68,6 @@ const generateRandomString = () => {
     result += characters.charAt(Math.floor(Math.random() * length));
   }
   return result;
-};
-
-// Helper function to validate users
-// Checks if email address exists in the 'database' object, taking in 'email and 'database' as parameters
-const getUserByEmail = (email, database) => {
-  // Loop through the database object
-  for (const userKey in database) {
-    const user = database[userKey];
-    // If email address already exists in the database, return the entire 'user' object
-    if (email === user.email) {
-      return user;
-    }
-  }
-  // If email not found in the database
-  return null;
 };
 
 // Helper function to return the URLs belonging to the current user
