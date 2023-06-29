@@ -4,8 +4,6 @@
 
 // Import express library
 const express = require('express');
-// Import cookie-parser
-const cookieParser = require('cookie-parser');
 // Import cookie-session
 const cookieSession = require('cookie-session');
 // Define app as an instance of express
@@ -108,8 +106,6 @@ const urlsForUser = (id) => {
 app.set('view engine', 'ejs');
 // Parse request body data from Buffer into human-readable string and makes the values accessible
 app.use(express.urlencoded({ extended: true }));
-// Parse cookie requests into human-readable details and makes the values accessible
-app.use(cookieParser());
 // Configure app to use encrypted cookies
 app.use(cookieSession({
   name: 'session',
