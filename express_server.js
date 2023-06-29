@@ -68,17 +68,18 @@ const generateRandomString = () => {
   return result;
 };
 
-// Helper function to validate users, checks if email address exists in the 'users' object, taking in 'email' as a parameter
-const getUserByEmail = (email) => {
-  // Loop through the users object
-  for (const userKey in users) {
-    const user = users[userKey];
-    // If email address already exists in the users object, return the entire 'user' object
+// Helper function to validate users
+// Checks if email address exists in the 'database' object, taking in 'email and 'database' as parameters
+const getUserByEmail = (email, database) => {
+  // Loop through the database object
+  for (const userKey in database) {
+    const user = database[userKey];
+    // If email address already exists in the database, return the entire 'user' object
     if (email === user.email) {
       return user;
     }
   }
-  // If email not found in the users object
+  // If email not found in the database
   return null;
 };
 
@@ -394,7 +395,7 @@ app.post('/login', (req, res) => {
     ${htmlBodyEnd}`);
   }
   // Lookup the specific 'user' object in the 'users' object using the entered email address
-  const user = getUserByEmail(email);
+  const user = getUserByEmail(email, users);
   // Handle error if 'user' object does not exist
   if (!user) {
     return res.status(403).send(`
@@ -446,7 +447,7 @@ app.post('/register', (req, res) => {
     ${htmlBodyEnd}`);
   }
   // Handle error if user enters an email address that already exists in the 'users' object
-  if (getUserByEmail(email)) {
+  if (getUserByEmail(email, users)) {
     return res.status(400).send(`
     ${htmlBodyStart}
     ${textStyle}
