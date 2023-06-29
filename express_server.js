@@ -117,15 +117,8 @@ app.get('/', (req, res) => {
     // Redirect user to login
     return res.redirect(`/login`);
   }
-  // Object to pass data to the template
-  const templateVars = {
-    // Lookup specific 'user' object in 'users' object using 'userId' cookie value & pass the entire 'user' object to templates via templateVars
-    user: users[req.session.userId],
-    // Lookup the URLs belonging to this user, and pass them to the templates
-    urls: urlsForUser(req.session.userId),
-  };
-  // Pass URL data to the template
-  res.render('urls_index', templateVars);
+  // Redirect user to /urls
+  return res.redirect(`/urls`);
 });
 
 // Route for /urls/new endpoint
