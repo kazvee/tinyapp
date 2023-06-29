@@ -11,7 +11,7 @@ const app = express();
 // Define base URL with port number on which the server will listen as http://localhost:8080
 const PORT = 8080;
 // Import bcryptjs to hash user passwords
-const bcrypt = require("bcryptjs");
+const bcrypt = require('bcryptjs');
 // Import helper function
 const getUserByEmail = require('./helpers');
 
@@ -20,15 +20,15 @@ const getUserByEmail = require('./helpers');
 //===========
 
 // Object containing shortened URLs
-// where key is 'id' and value is an object that has its own keys of 'longURL' and 'userID'
+// Key is 'id' and value is an object that has its own Keys of 'longURL' and 'userID'
 const urlDatabase = {
   b6UTxQ: {
-    longURL: "https://www.tsn.ca",
-    userID: "aJ48lW",
+    longURL: 'https://www.tsn.ca',
+    userID: 'aJ48lW',
   },
   i3BoGr: {
-    longURL: "https://www.google.ca",
-    userID: "aJ48lW",
+    longURL: 'https://www.google.ca',
+    userID: 'aJ48lW',
   },
 };
 
@@ -46,7 +46,7 @@ const users = {
   },
 };
 
-// Helper objects to add text styling for login & register error message pages
+// Helper objects to add text styling for Login and Register error message pages
 const htmlBodyStart = '<html><body>';
 const textStyle = `<p style='font-family: Verdana, sans-serif; font-size: 16px'>`;
 const loginLink = `<a href='/login'>HERE</a>`;
@@ -110,7 +110,9 @@ app.use(cookieSession({
 //  GET ROUTES
 //==============
 
-// Route handler for root path '/'
+//=================
+//  ROOT PATH '/'
+//=================
 app.get('/', (req, res) => {
   // If user is not logged in with cookie
   if (!req.session.userId) {
@@ -121,10 +123,13 @@ app.get('/', (req, res) => {
   return res.redirect(`/urls`);
 });
 
-// Route for /urls/new endpoint
+//=============
+//  /URLS/NEW
+//=============
 app.get('/urls/new', (req, res) => {
   const templateVars = {
-    // Lookup specific 'user' object in 'users' object using 'userId' cookie value & pass the entire 'user' object to templates via templateVars
+    // Lookup specific 'user' object in 'users' object using 'userId' cookie value
+    // and pass the entire 'user' object to templates via templateVars
     user: users[req.session.userId]
   };
   // If user is not logged in with cookie
@@ -136,7 +141,10 @@ app.get('/urls/new', (req, res) => {
   res.render('urls_new', templateVars);
 });
 
-// Route for /urls/:id endpoint (note that :id is a route parameter)
+//=============
+//  /URLS/:ID
+//=============
+// Note that ':id' is a route parameter
 app.get('/urls/:id', (req, res) => {
   // Check if requested Short URL ID exists in the database
   if (!urlDatabase[req.params.id]) {
@@ -173,7 +181,8 @@ app.get('/urls/:id', (req, res) => {
   }
   // Object to pass data for a single URL to the template
   const templateVars = {
-    // Lookup specific 'user' object in 'users' object using 'userId' cookie value & pass the entire 'user' object to templates via templateVars
+    // Lookup specific 'user' object in 'users' object using 'userId' cookie value
+    // and pass the entire 'user' object to templates via templateVars
     user: users[req.session.userId],
     id: req.params.id,
     longURL: urlDatabase[req.params.id].longURL
@@ -182,7 +191,10 @@ app.get('/urls/:id', (req, res) => {
   res.render('urls_show', templateVars);
 });
 
-// Route for /u/:id endpoint (note that :id is a route parameter)
+//==========
+//  /U/:ID
+//==========
+// Note that ':id' is a route parameter
 app.get('/u/:id', (req, res) => {
   // Check if requested Short URL ID exists in the database
   if (!urlDatabase[req.params.id]) {
@@ -207,7 +219,9 @@ app.get('/urls.json', (req, res) => {
   res.json(urlDatabase);
 });
 
-// Route for /urls endpoint
+//=========
+//  /URLS
+//=========
 app.get('/urls', (req, res) => {
   // If user is not logged in with cookie
   if (!req.session.userId) {
@@ -222,7 +236,8 @@ app.get('/urls', (req, res) => {
   }
   // Object to pass data to the template
   const templateVars = {
-    // Lookup specific 'user' object in 'users' object using 'userId' cookie value & pass the entire 'user' object to templates via templateVars
+    // Lookup specific 'user' object in 'users' object using 'userId' cookie value
+    // and pass the entire 'user' object to templates via templateVars
     user: users[req.session.userId],
     // Lookup the URLs belonging to this user, and pass them to the templates
     urls: urlsForUser(req.session.userId),
@@ -231,11 +246,15 @@ app.get('/urls', (req, res) => {
   res.render('urls_index', templateVars);
 });
 
-// Route for /register endpoint for new user signup
+//=============
+//  /REGISTER
+//=============
+// Handle new user signup
 app.get('/register', (req, res) => {
   // Object to pass data to the template
   const templateVars = {
-    // Lookup specific 'user' object in 'users' object using 'userId' cookie value & pass the entire 'user' object to templates via templateVars
+    // Lookup specific 'user' object in 'users' object using 'userId' cookie value
+    // and pass the entire 'user' object to templates via templateVars
     user: users[req.session.userId]
   };
   // If user is already logged in with cookie
@@ -247,11 +266,15 @@ app.get('/register', (req, res) => {
   res.render('register', templateVars);
 });
 
-// Route for /login endpoint for existing user signin
+//=============
+//  /LOGIN
+//=============
+// Handle existing user sign-in
 app.get('/login', (req, res) => {
   // Object to pass data to the template
   const templateVars = {
-    // Lookup specific 'user' object in 'users' object using 'userId' cookie value & pass the entire 'user' object to templates via templateVars
+    // Lookup specific 'user' object in 'users' object using 'userId' cookie value
+    // and pass the entire 'user' object to templates via templateVars
     user: users[req.session.userId]
   };
   // If user is already logged in with cookie
@@ -267,7 +290,10 @@ app.get('/login', (req, res) => {
 //  POST ROUTES
 //===============
 
-// Route for /urls endpoint to receive new URL form submission
+//=========
+//  /URLS
+//=========
+// Handle new URL form submission
 app.post('/urls', (req, res) => {
   // If user is not logged in with cookie
   if (!req.session.userId) {
@@ -293,7 +319,10 @@ app.post('/urls', (req, res) => {
   res.redirect(`/urls/${id}`);
 });
 
-// Route for /urls/:id/delete to handle short URL ID deletion
+//====================
+//  /URLS/:ID/DELETE
+//====================
+// Handle Short URL ID deletion
 app.post(`/urls/:id/delete`, (req, res) => {
   // If user is not logged in with cookie
   if (!req.session.userId) {
@@ -336,7 +365,10 @@ app.post(`/urls/:id/delete`, (req, res) => {
   res.redirect(`/urls`);
 });
 
-// Route for /urls/:id to handle editing of Short URL ID details
+//==============
+//  /URLS/:ID/
+//==============
+// Handle Short URL ID editing
 app.post(`/urls/:id`, (req, res) => {
   // If user is not logged in with cookie
   if (!req.session.userId) {
@@ -381,7 +413,10 @@ app.post(`/urls/:id`, (req, res) => {
   res.redirect('/urls');
 });
 
-// Route to handle user login
+//==========
+//  /LOGIN
+//==========
+// Handle user sign-in
 app.post('/login', (req, res) => {
   // Get email address from request body
   const email = req.body.email;
@@ -419,13 +454,16 @@ app.post('/login', (req, res) => {
     Please click ${loginLink} to login, or ${registerLink} to register for a new account! 🙂
     ${htmlBodyEnd}`);
   }
-  // If 'user' exists & entered password is a match, set cookie named 'userId' to the value for the 'id' of the user
+  // If 'user' exists AND entered password is a match, set cookie named 'userId' to the value for the 'id' of the user
   req.session.userId = user.id;
   // Redirect user to /urls
   res.redirect('/urls');
 });
 
-// Route to handle user logout
+//===========
+//  /LOGOUT
+//===========
+// Handle user sign-out
 app.post('/logout', (req, res) => {
   // Clear the 'userId' cookie
   req.session = null;
@@ -433,7 +471,10 @@ app.post('/logout', (req, res) => {
   res.redirect('/login');
 });
 
-// Route to handle new user registration
+//=============
+//  /REGISTER
+//=============
+// Handle new user sign-up
 app.post('/register', (req, res) => {
   // Get new user email address from request body
   const email = req.body.email;
