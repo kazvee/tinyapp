@@ -145,6 +145,17 @@ app.get('/urls/new', (req, res) => {
 
 // Route for /urls/:id endpoint (note that :id is a route parameter)
 app.get('/urls/:id', (req, res) => {
+  // Check if requested Short URL ID exists in the database
+  if (!urlDatabase[req.params.id]) {
+    // If not, send error message to user
+    return res.status(404).send(`
+    ${htmlBodyStart}
+    ${textStyle}
+    Response Status Code: ${res.statusCode}<br><br>
+    The Short URL ID provided (${req.params.id}) does not exist.<br><br>
+    Please try again.
+    ${htmlBodyEnd}`);
+  }
   // If user is not logged in with cookie
   if (!req.session.userId) {
     // Advise user that they must be logged-in to view /urls/:id
