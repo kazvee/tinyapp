@@ -135,12 +135,11 @@ app.get('/', (req, res) => {
 // Route for /urls/new endpoint
 app.get('/urls/new', (req, res) => {
   const templateVars = {
-    // Lookup specific 'user' object in 'users' object using 'user_id' cookie value
-    // & pass the entire object to templates via templateVars
-    user: users[req.cookies['user_id']]
+    // Lookup specific 'user' object in 'users' object using 'userId' cookie value & pass the entire 'user' object to templates via templateVars
+    user: users[req.session.userId]
   };
   // If user is not logged in with cookie
-  if (!req.cookies.user_id) {
+  if (!req.session.userId) {
     // Redirect user to login
     return res.redirect(`/login`);
   }
@@ -151,7 +150,7 @@ app.get('/urls/new', (req, res) => {
 // Route for /urls/:id endpoint (note that :id is a route parameter)
 app.get('/urls/:id', (req, res) => {
   // If user is not logged in with cookie
-  if (!req.cookies.user_id) {
+  if (!req.session.userId) {
     // Advise user that they must be logged-in to view /urls/:id
     return res.status(401).send(`
       ${htmlBodyStart}
@@ -162,7 +161,7 @@ app.get('/urls/:id', (req, res) => {
       ${htmlBodyEnd}`);
   }
   // If logged-in user does not own the URL 'id'
-  if (!urlsForUser(req.cookies.user_id)[req.params.id]) {
+  if (!urlsForUser(req.session.userId)[req.params.id]) {
     // Advise user they are not permitted to access it
     return res.status(403).send(`
       ${htmlBodyStart}
@@ -174,9 +173,8 @@ app.get('/urls/:id', (req, res) => {
   }
   // Object to pass data for a single URL to the template
   const templateVars = {
-    // Lookup specific 'user' object in 'users' object using 'user_id' cookie value
-    // & pass the entire object to templates via templateVars
-    user: users[req.cookies['user_id']],
+    // Lookup specific 'user' object in 'users' object using 'userId' cookie value & pass the entire 'user' object to templates via templateVars
+    user: users[req.session.userId],
     id: req.params.id,
     longURL: urlDatabase[req.params.id].longURL
   };
@@ -212,7 +210,7 @@ app.get('/urls.json', (req, res) => {
 // Route for /urls endpoint
 app.get('/urls', (req, res) => {
   // If user is not logged in with cookie
-  if (!req.cookies.user_id) {
+  if (!req.session.userId) {
     // Advise user that they must be logged-in to view /urls
     return res.status(401).send(`
     ${htmlBodyStart}
@@ -224,11 +222,10 @@ app.get('/urls', (req, res) => {
   }
   // Object to pass data to the template
   const templateVars = {
-    // Lookup specific 'user' object in 'users' object using 'user_id' cookie value
-    // & pass the entire object to templates via templateVars
-    user: users[req.cookies['user_id']],
+    // Lookup specific 'user' object in 'users' object using 'userId' cookie value & pass the entire 'user' object to templates via templateVars
+    user: users[req.session.userId],
     // Lookup the URLs belonging to this user, and pass them to the templates
-    urls: urlsForUser(req.cookies.user_id),
+    urls: urlsForUser(req.session.userId),
   };
   // Pass URL data to the template
   res.render('urls_index', templateVars);
@@ -238,12 +235,11 @@ app.get('/urls', (req, res) => {
 app.get('/register', (req, res) => {
   // Object to pass data to the template
   const templateVars = {
-    // Lookup specific 'user' object in 'users' object using 'user_id' cookie value
-    // & pass the entire object to templates via templateVars
-    user: users[req.cookies['user_id']]
+    // Lookup specific 'user' object in 'users' object using 'userId' cookie value & pass the entire 'user' object to templates via templateVars
+    user: users[req.session.userId]
   };
   // If user is already logged in with cookie
-  if (req.cookies.user_id) {
+  if (req.session.userId) {
     // Redirect them to /urls
     return res.redirect(`/urls`);
   }
@@ -255,12 +251,11 @@ app.get('/register', (req, res) => {
 app.get('/login', (req, res) => {
   // Object to pass data to the template
   const templateVars = {
-    // Lookup specific 'user' object in 'users' object using 'user_id' cookie value
-    // & pass the entire object to templates via templateVars
-    user: users[req.cookies['user_id']]
+    // Lookup specific 'user' object in 'users' object using 'userId' cookie value & pass the entire 'user' object to templates via templateVars
+    user: users[req.session.userId]
   };
   // If user is already logged in with cookie
-  if (req.cookies.user_id) {
+  if (req.session.userId) {
     // Redirect them to /urls
     return res.redirect(`/urls`);
   }
@@ -275,7 +270,7 @@ app.get('/login', (req, res) => {
 // Route for /urls endpoint to receive new URL form submission
 app.post('/urls', (req, res) => {
   // If user is not logged in with cookie
-  if (!req.cookies.user_id) {
+  if (!req.session.userId) {
     // Advise user that they must be logged-in to create new Short URL
     return res.status(401).send(`
     ${htmlBodyStart}
@@ -292,7 +287,7 @@ app.post('/urls', (req, res) => {
   // Store 'longURL' and 'userID' in the object associated with the 'id' key within the urlDatabase object
   urlDatabase[id] = {
     longURL,
-    userID: req.cookies.user_id
+    userID: req.session.userId
   };
   // Redirect user to /urls/:id
   res.redirect(`/urls/${id}`);
@@ -301,7 +296,7 @@ app.post('/urls', (req, res) => {
 // Route for /urls/:id/delete to handle short URL ID deletion
 app.post(`/urls/:id/delete`, (req, res) => {
   // If user is not logged in with cookie
-  if (!req.cookies.user_id) {
+  if (!req.session.userId) {
     // Advise user that they must be logged-in to delete a Short URL
     return res.status(401).send(`
         ${htmlBodyStart}
@@ -325,7 +320,7 @@ app.post(`/urls/:id/delete`, (req, res) => {
       ${htmlBodyEnd}`);
   }
   // If logged-in user does not own the URL 'id'
-  if (!urlsForUser(req.cookies.user_id)[id]) {
+  if (!urlsForUser(req.session.userId)[id]) {
     // Advise user they are not permitted to delete it
     return res.status(403).send(`
         ${htmlBodyStart}
@@ -344,7 +339,7 @@ app.post(`/urls/:id/delete`, (req, res) => {
 // Route for /urls/:id to handle editing of Short URL ID details
 app.post(`/urls/:id`, (req, res) => {
   // If user is not logged in with cookie
-  if (!req.cookies.user_id) {
+  if (!req.session.userId) {
     // Advise user that they must be logged-in to edit a Short URL
     return res.status(401).send(`
           ${htmlBodyStart}
@@ -368,7 +363,7 @@ app.post(`/urls/:id`, (req, res) => {
       ${htmlBodyEnd}`);
   }
   // If logged-in user does not own the URL 'id'
-  if (!urlsForUser(req.cookies.user_id)[id]) {
+  if (!urlsForUser(req.session.userId)[id]) {
     // Advise user they are not permitted to edit it
     return res.status(403).send(`
           ${htmlBodyStart}
@@ -424,17 +419,16 @@ app.post('/login', (req, res) => {
     Please click ${loginLink} to login, or ${registerLink} to register for a new account! 🙂
     ${htmlBodyEnd}`);
   }
-  // If 'user' exists AND entered password is a match
-  // set cookie named 'user_id' to the value for the 'id' of the user
-  res.cookie('user_id', user.id);
+  // If 'user' exists & entered password is a match, set cookie named 'userId' to the value for the 'id' of the user
+  req.session.userId = user.id;
   // Redirect user to /urls
   res.redirect('/urls');
 });
 
 // Route to handle user logout
 app.post('/logout', (req, res) => {
-  // Clear the 'user_id' cookie
-  res.clearCookie('user_id');
+  // Clear the 'userId' cookie
+  req.session = null;
   // Redirect user to /urls
   res.redirect('/login');
 });
@@ -475,8 +469,8 @@ app.post('/register', (req, res) => {
     email,
     password: hashedPassword
   };
-  // Set cookie named 'user_id' to the value for the newly-generated User ID
-  res.cookie('user_id', userID);
+  // Set cookie named 'userId' to the value for the newly-generated User ID
+  req.session.userId = userID;
   // Redirect user to /urls
   res.redirect('/urls');
 });
