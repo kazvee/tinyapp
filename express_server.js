@@ -16,8 +16,12 @@ app.use(methodOverride('_method'));
 const PORT = 8080;
 // Import bcryptjs to hash user passwords
 const bcrypt = require('bcryptjs');
-// Import helper function
-const { getUserByEmail, generateRandomString } = require('./helpers');
+
+//=============
+//  FUNCTIONS
+//=============
+// Import helper functions
+const { getUserByEmail, generateRandomString, urlsForUser } = require('./helpers');
 
 //===========
 //  OBJECTS
@@ -56,26 +60,6 @@ const textStyle = `<p style='font-family: Verdana, sans-serif; font-size: 16px'>
 const loginLink = `<a href='/login'>HERE</a>`;
 const registerLink = `<a href='/register'>HERE</a>`;
 const htmlBodyEnd = `</body></html>\n`;
-
-//=============
-//  FUNCTIONS
-//=============
-
-// Helper function to return the URLs belonging to the current user
-// Takes in 'id' as a parameter and returns URLs where 'userID' is equal to the 'id' of the user currently logged in
-const urlsForUser = (id) => {
-  // Object to store URLs belonging to the current user
-  const currentUserURLs = {};
-  // Loop through the urlDatabase object
-  for (const shortUrlID in urlDatabase) {
-    // Check for Short URL IDs that have the current user's 'userID'
-    if (urlDatabase[shortUrlID].userID === id) {
-      // Assign them to the current user's list of Short URL IDs
-      currentUserURLs[shortUrlID] = urlDatabase[shortUrlID];
-    }
-  }
-  return currentUserURLs;
-};
 
 //==============
 //  MIDDLEWARE
@@ -160,7 +144,7 @@ app.get('/urls/:id', (req, res) => {
       ${htmlBodyEnd}`);
   }
   // If logged in user does not own the URL 'id'
-  if (!urlsForUser(req.session.userId)[req.params.id]) {
+  if (!urlsForUser(req.session.userId, urlDatabase)[req.params.id]) {
     // Advise user they are not permitted to access it
     return res.status(403).send(`
       ${htmlBodyStart}
@@ -176,7 +160,8 @@ app.get('/urls/:id', (req, res) => {
     // and pass the entire 'user' object to templates via templateVars
     user: users[req.session.userId],
     id: req.params.id,
-    longURL: urlDatabase[req.params.id].longURL
+    longURL: urlDatabase[req.params.id].longURL,
+    urls: urlsForUser(req.session.userId, urlDatabase),
   };
   // Pass data for a single URL to the template
   res.render('urls_show', templateVars);
@@ -231,7 +216,7 @@ app.get('/urls', (req, res) => {
     // and pass the entire 'user' object to templates via templateVars
     user: users[req.session.userId],
     // Lookup the URLs belonging to this user, and pass them to the templates
-    urls: urlsForUser(req.session.userId),
+    urls: urlsForUser(req.session.userId, urlDatabase),
   };
   // Pass URL data to the template
   res.render('urls_index', templateVars);
@@ -447,7 +432,7 @@ app.put('/urls/:id', (req, res) => {
       ${htmlBodyEnd}`);
   }
   // If logged in user does not own the URL 'id'
-  if (!urlsForUser(req.session.userId)[id]) {
+  if (!urlsForUser(req.session.userId, urlDatabase)[id]) {
     // Advise user they are not permitted to edit it
     return res.status(403).send(`
           ${htmlBodyStart}
@@ -499,7 +484,7 @@ app.delete('/urls/:id', (req, res) => {
       ${htmlBodyEnd}`);
   }
   // If logged in user does not own the URL 'id'
-  if (!urlsForUser(req.session.userId)[id]) {
+  if (!urlsForUser(req.session.userId, urlDatabase)[id]) {
     // Advise user they are not permitted to delete it
     return res.status(403).send(`
         ${htmlBodyStart}

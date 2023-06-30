@@ -26,6 +26,20 @@ const generateRandomString = () => {
   return result;
 };
 
+// Helper function to return the URLs belonging to the current user
+// Takes in 'id' as a parameter and returns URLs where 'userID' is equal to the 'id' of the user currently logged in
+const urlsForUser = (id, urlDatabase) => {
+  // Object to store URLs belonging to the current user
+  const currentUserURLs = {};
+  // Loop through the urlDatabase object
+  for (const shortUrlID in urlDatabase) {
+    // Check for Short URL IDs that have the current user's 'userID'
+    if (urlDatabase[shortUrlID].userID === id) {
+      // Assign them to the current user's list of Short URL IDs
+      currentUserURLs[shortUrlID] = urlDatabase[shortUrlID];
+    }
+  }
+  return currentUserURLs;
+};
 
-
-module.exports = { getUserByEmail, generateRandomString };
+module.exports = { getUserByEmail, generateRandomString, urlsForUser };
