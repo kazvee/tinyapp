@@ -4,10 +4,14 @@
 
 // Import express library
 const express = require('express');
+// Import method-override package
+const methodOverride = require('method-override');
 // Import cookie-session
 const cookieSession = require('cookie-session');
 // Define app as an instance of express
 const app = express();
+// override with POST having ?_method=DELETE
+app.use(methodOverride('_method'));
 // Define base URL with port number on which the server will listen as http://localhost:8080
 const PORT = 8080;
 // Import bcryptjs to hash user passwords
