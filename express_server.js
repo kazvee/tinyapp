@@ -75,7 +75,7 @@ const generateRandomString = () => {
 };
 
 // Helper function to return the URLs belonging to the current user
-// Takes in 'id' as a parameter and returns URLs where 'userID' is equal to the 'id' of the currently logged-in user
+// Takes in 'id' as a parameter and returns URLs where 'userID' is equal to the 'id' of the user currently logged in
 const urlsForUser = (id) => {
   // Object to store URLs belonging to the current user
   const currentUserURLs = {};
@@ -121,10 +121,10 @@ app.get('/', (req, res) => {
   // If user is not logged in with cookie
   if (!req.session.userId) {
     // Redirect user to login
-    return res.redirect(`/login`);
+    return res.redirect('/login');
   }
   // Redirect user to /urls
-  return res.redirect(`/urls`);
+  return res.redirect('/urls');
 });
 
 //=============
@@ -139,7 +139,7 @@ app.get('/urls/new', (req, res) => {
   // If user is not logged in with cookie
   if (!req.session.userId) {
     // Redirect user to login
-    return res.redirect(`/login`);
+    return res.redirect('/login');
   }
   // Find the urls_new template and send it to the browser
   res.render('urls_new', templateVars);
@@ -163,7 +163,7 @@ app.get('/urls/:id', (req, res) => {
   }
   // If user is not logged in with cookie
   if (!req.session.userId) {
-    // Advise user that they must be logged-in to view /urls/:id
+    // Advise user that they must be logged in to view /urls/:id
     return res.status(401).send(`
       ${htmlBodyStart}
       ${textStyle}
@@ -172,7 +172,7 @@ app.get('/urls/:id', (req, res) => {
       Please click ${loginLink} to login, or ${registerLink} to register for a new account! 🙂
       ${htmlBodyEnd}`);
   }
-  // If logged-in user does not own the URL 'id'
+  // If logged in user does not own the URL 'id'
   if (!urlsForUser(req.session.userId)[req.params.id]) {
     // Advise user they are not permitted to access it
     return res.status(403).send(`
@@ -229,7 +229,7 @@ app.get('/urls.json', (req, res) => {
 app.get('/urls', (req, res) => {
   // If user is not logged in with cookie
   if (!req.session.userId) {
-    // Advise user that they must be logged-in to view /urls
+    // Advise user that they must be logged in to view /urls
     return res.status(401).send(`
     ${htmlBodyStart}
     ${textStyle}
@@ -264,7 +264,7 @@ app.get('/register', (req, res) => {
   // If user is already logged in with cookie
   if (req.session.userId) {
     // Redirect them to /urls
-    return res.redirect(`/urls`);
+    return res.redirect('/urls');
   }
   // Find the register.ejs template and send it to the browser
   res.render('register', templateVars);
@@ -284,7 +284,7 @@ app.get('/login', (req, res) => {
   // If user is already logged in with cookie
   if (req.session.userId) {
     // Redirect them to /urls
-    return res.redirect(`/urls`);
+    return res.redirect('/urls');
   }
   // Find the login.ejs template and send it to the browser
   res.render('login', templateVars);
@@ -301,7 +301,7 @@ app.get('/login', (req, res) => {
 app.post('/urls', (req, res) => {
   // If user is not logged in with cookie
   if (!req.session.userId) {
-    // Advise user that they must be logged-in to create new Short URL
+    // Advise user that they must be logged in to create new Short URL
     return res.status(401).send(`
     ${htmlBodyStart}
     ${textStyle}
@@ -326,7 +326,7 @@ app.post('/urls', (req, res) => {
 //==========
 //  /LOGIN
 //==========
-// Handle user sign-in
+// Handle existing user sign-in
 app.post('/login', (req, res) => {
   // Get email address from request body
   const email = req.body.email;
@@ -426,7 +426,6 @@ app.post('/register', (req, res) => {
   res.redirect('/urls');
 });
 
-
 //==============
 //  PUT ROUTES
 //==============
@@ -435,10 +434,10 @@ app.post('/register', (req, res) => {
 //  /URLS/:ID
 //==============
 // Handle Short URL ID editing
-app.put(`/urls/:id`, (req, res) => {
+app.put('/urls/:id', (req, res) => {
   // If user is not logged in with cookie
   if (!req.session.userId) {
-    // Advise user that they must be logged-in to edit a Short URL
+    // Advise user that they must be logged in to edit a Short URL
     return res.status(401).send(`
           ${htmlBodyStart}
           ${textStyle}
@@ -460,7 +459,7 @@ app.put(`/urls/:id`, (req, res) => {
       Please try again.
       ${htmlBodyEnd}`);
   }
-  // If logged-in user does not own the URL 'id'
+  // If logged in user does not own the URL 'id'
   if (!urlsForUser(req.session.userId)[id]) {
     // Advise user they are not permitted to edit it
     return res.status(403).send(`
@@ -487,10 +486,10 @@ app.put(`/urls/:id`, (req, res) => {
 //  /URLS/:ID
 //====================
 // Handle Short URL ID deletion
-app.delete(`/urls/:id`, (req, res) => {
+app.delete('/urls/:id', (req, res) => {
   // If user is not logged in with cookie
   if (!req.session.userId) {
-    // Advise user that they must be logged-in to delete a Short URL
+    // Advise user that they must be logged in to delete a Short URL
     return res.status(401).send(`
         ${htmlBodyStart}
         ${textStyle}
@@ -512,7 +511,7 @@ app.delete(`/urls/:id`, (req, res) => {
       Please try again.
       ${htmlBodyEnd}`);
   }
-  // If logged-in user does not own the URL 'id'
+  // If logged in user does not own the URL 'id'
   if (!urlsForUser(req.session.userId)[id]) {
     // Advise user they are not permitted to delete it
     return res.status(403).send(`
@@ -526,7 +525,7 @@ app.delete(`/urls/:id`, (req, res) => {
   // Delete the specified Short URL ID
   delete urlDatabase[id];
   // Redirect user to /urls
-  res.redirect(`/urls`);
+  res.redirect('/urls');
 });
 
 //================
