@@ -323,54 +323,6 @@ app.post('/urls', (req, res) => {
   res.redirect(`/urls/${id}`);
 });
 
-//==============
-//  /URLS/:ID/
-//==============
-// Handle Short URL ID editing
-app.post(`/urls/:id`, (req, res) => {
-  // If user is not logged in with cookie
-  if (!req.session.userId) {
-    // Advise user that they must be logged-in to edit a Short URL
-    return res.status(401).send(`
-          ${htmlBodyStart}
-          ${textStyle}
-          Response Status Code: ${res.statusCode}<br><br>
-          Must be logged in to edit a short URL.<br><br>
-          Please click ${loginLink} to login, or ${registerLink} to register for a new account! 🙂
-          ${htmlBodyEnd}`);
-  }
-  // Get the Short URL ID from the route parameter
-  const id = req.params.id;
-  // Check if requested Short URL ID exists in the database
-  if (!urlDatabase[id]) {
-    // If not, send error message to user
-    return res.status(404).send(`
-      ${htmlBodyStart}
-      ${textStyle}
-      Response Status Code: ${res.statusCode}<br><br>
-      The Short URL ID provided (${req.params.id}) does not exist.<br><br>
-      Please try again.
-      ${htmlBodyEnd}`);
-  }
-  // If logged-in user does not own the URL 'id'
-  if (!urlsForUser(req.session.userId)[id]) {
-    // Advise user they are not permitted to edit it
-    return res.status(403).send(`
-          ${htmlBodyStart}
-          ${textStyle}
-          Response Status Code: ${res.statusCode}<br><br>
-          You do not have permission to edit this URL.<br><br>
-          Please click <a href='/urls'>HERE</a> to access your owned URLs.
-          ${htmlBodyEnd}`);
-  }
-  // Assign longURL value to be the editURL value received from the POST request body
-  const longURL = req.body.newURL;
-  // Update the longUrl value in the database with the newly-provided longURL value
-  urlDatabase[id].longURL = longURL;
-  // Redirect user to /urls
-  res.redirect('/urls');
-});
-
 //==========
 //  /LOGIN
 //==========
@@ -470,6 +422,59 @@ app.post('/register', (req, res) => {
   };
   // Set cookie named 'userId' to the value for the newly-generated User ID
   req.session.userId = userID;
+  // Redirect user to /urls
+  res.redirect('/urls');
+});
+
+
+//==============
+//  PUT ROUTES
+//==============
+
+//==============
+//  /URLS/:ID
+//==============
+// Handle Short URL ID editing
+app.put(`/urls/:id`, (req, res) => {
+  // If user is not logged in with cookie
+  if (!req.session.userId) {
+    // Advise user that they must be logged-in to edit a Short URL
+    return res.status(401).send(`
+          ${htmlBodyStart}
+          ${textStyle}
+          Response Status Code: ${res.statusCode}<br><br>
+          Must be logged in to edit a short URL.<br><br>
+          Please click ${loginLink} to login, or ${registerLink} to register for a new account! 🙂
+          ${htmlBodyEnd}`);
+  }
+  // Get the Short URL ID from the route parameter
+  const id = req.params.id;
+  // Check if requested Short URL ID exists in the database
+  if (!urlDatabase[id]) {
+    // If not, send error message to user
+    return res.status(404).send(`
+      ${htmlBodyStart}
+      ${textStyle}
+      Response Status Code: ${res.statusCode}<br><br>
+      The Short URL ID provided (${req.params.id}) does not exist.<br><br>
+      Please try again.
+      ${htmlBodyEnd}`);
+  }
+  // If logged-in user does not own the URL 'id'
+  if (!urlsForUser(req.session.userId)[id]) {
+    // Advise user they are not permitted to edit it
+    return res.status(403).send(`
+          ${htmlBodyStart}
+          ${textStyle}
+          Response Status Code: ${res.statusCode}<br><br>
+          You do not have permission to edit this URL.<br><br>
+          Please click <a href='/urls'>HERE</a> to access your owned URLs.
+          ${htmlBodyEnd}`);
+  }
+  // Assign longURL value to be the editURL value received from the POST request body
+  const longURL = req.body.newURL;
+  // Update the longUrl value in the database with the newly-provided longURL value
+  urlDatabase[id].longURL = longURL;
   // Redirect user to /urls
   res.redirect('/urls');
 });
