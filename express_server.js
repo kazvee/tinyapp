@@ -35,14 +35,16 @@ const urlDatabase = {
     userID: 'aJ48lW',
     visits: {},
     totalVisits: 0,
-    uniqueVisits: 0
+    uniqueVisits: 0,
+    createdDate: 0,
   },
   i3BoGr: {
     longURL: 'https://www.google.ca',
     userID: 'aJ48lW',
     visits: {},
     totalVisits: 0,
-    uniqueVisits: 0
+    uniqueVisits: 0,
+    createdDate: 0,
   }
 };
 
@@ -162,9 +164,12 @@ app.get('/urls/:id', (req, res) => {
   }
   // Get the URL object from the urlDatabase
   const url = urlDatabase[req.params.id];
-  // Calculate the total number of visits for the URL
-  const totalVisits = Object.keys(url.visits).length;
-  const uniqueVisits = Object.keys(url.visits).length;
+  // Get the total number of visits for the URL
+  const totalVisits = url.totalVisits;
+  // Get the total number of unique visits for the URL
+  const uniqueVisits = url.uniqueVisits;
+  // Get the createdDate for the URL
+  const createdDate = url.createdDate;
   // Object to pass data for a single URL to the template
   const templateVars = {
     // Lookup specific 'user' object in 'users' object using 'userId' cookie value
@@ -175,7 +180,8 @@ app.get('/urls/:id', (req, res) => {
     urls: urlsForUser(req.session.userId, urlDatabase),
     totalVisits,
     uniqueVisits,
-    visitorID: req.session.visitorID
+    visitorID: req.session.visitorID,
+    createdDate
   };
   // Pass data for a single URL to the template
   res.render('urls_show', templateVars);
@@ -337,7 +343,8 @@ app.post('/urls', (req, res) => {
     userID: req.session.userId,
     visits: {},
     totalVisits: 0,
-    uniqueVisits: 0
+    uniqueVisits: 0,
+    createdDate: new Date().toISOString()
   };
   // Redirect user to /urls/:id
   res.redirect(`/urls/${id}`);
