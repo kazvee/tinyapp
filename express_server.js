@@ -28,16 +28,22 @@ const { getUserByEmail, generateRandomString, urlsForUser } = require('./helpers
 //===========
 
 // Object containing shortened URLs
-// Key is 'id' and value is an object that has its own Keys of 'longURL' and 'userID'
+// Key is 'id' and value is an object that has its own Keys
 const urlDatabase = {
   b6UTxQ: {
     longURL: 'https://www.tsn.ca',
     userID: 'aJ48lW',
+    visits: {},
+    totalVisits: 0,
+    uniqueVisits: 0
   },
   i3BoGr: {
     longURL: 'https://www.google.ca',
     userID: 'aJ48lW',
-  },
+    visits: {},
+    totalVisits: 0,
+    uniqueVisits: 0
+  }
 };
 
 // TEST DATA ONLY - Object to store & access user data
@@ -154,6 +160,11 @@ app.get('/urls/:id', (req, res) => {
       Please click <a href='/urls'>HERE</a> to access your owned URLs.
       ${htmlBodyEnd}`);
   }
+  // Get the URL object from the urlDatabase
+  const url = urlDatabase[req.params.id];
+  // Calculate the total number of visits for the URL
+  const totalVisits = Object.keys(url.visits).length;
+  const uniqueVisits = Object.keys(url.visits).length;
   // Object to pass data for a single URL to the template
   const templateVars = {
     // Lookup specific 'user' object in 'users' object using 'userId' cookie value
@@ -162,6 +173,9 @@ app.get('/urls/:id', (req, res) => {
     id: req.params.id,
     longURL: urlDatabase[req.params.id].longURL,
     urls: urlsForUser(req.session.userId, urlDatabase),
+    totalVisits,
+    uniqueVisits,
+    visitorID: req.session.visitorID
   };
   // Pass data for a single URL to the template
   res.render('urls_show', templateVars);
@@ -183,6 +197,37 @@ app.get('/u/:id', (req, res) => {
     Please try again.
     ${htmlBodyEnd}`);
   }
+  // TRACK VISIT STATS
+  // Get URL object from the urlDatabase
+  const url = urlDatabase[req.params.id];
+  // Create a timestamp of the current time
+  const timestamp = new Date().toISOString();
+  // Count the existing url session views OR (||) set it to 0 if there are none yet
+  let totalVisits = req.session.views || 0;
+  // Add 1 to totalVisits
+  totalVisits += 1;
+  // Update the session data with the modified totalVisits total
+  req.session.views = totalVisits;
+  // Check if the visitorID exists in the session and if not, generate a new visitorID
+  const visitorID = req.session.visitorID || generateRandomString();
+  // If visitorID does not exist then store it in the session data
+  if (!req.session.visitorID) {
+    req.session.visitorID = visitorID;
+  }
+  // Count the existing uniqueVisits or set to 0 if there are none
+  let uniqueVisits = urlDatabase[req.params.id];
+  if (!uniqueVisits) {
+    uniqueVisits = 0;
+  }
+  // Check if the visitorID has already been recorded for this Short URL
+  if (!url.visits[visitorID]) {
+    // If not, add their visitorID and timestamp to the visits object for unique views
+    url.visits[visitorID] = { timestamp: timestamp.toLocaleLowerCase() };
+    // Add 1 to the uniqueVisits total
+    url.uniqueVisits += 1;
+  }
+  // Add 1 to the totalVisits total
+  urlDatabase[req.params.id].totalVisits += 1;
   // Get longURL value associated with Short URL 'id' in the urlDatabase object
   const longURL = urlDatabase[req.params.id].longURL;
   // Redirect user to the actual website (longURL) associated to the Short URL ID
@@ -289,7 +334,10 @@ app.post('/urls', (req, res) => {
   // Store 'longURL' and 'userID' in the object associated with the 'id' key within the urlDatabase object
   urlDatabase[id] = {
     longURL,
-    userID: req.session.userId
+    userID: req.session.userId,
+    visits: {},
+    totalVisits: 0,
+    uniqueVisits: 0
   };
   // Redirect user to /urls/:id
   res.redirect(`/urls/${id}`);
