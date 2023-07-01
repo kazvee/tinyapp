@@ -14,15 +14,15 @@ Say *hello* to shareable shortlinks that leave plenty of room for your **_sass_*
 ## Final Product
 *View of New User Registration Page:*
 
-!["Screenshot of New User Registration page"](/docs/register-page.png)
+!["Screenshot of New User Registration page"](/docs/screenshot-register-page.png)
 
 *Logged-in user view of saved short URLs with visitor tracking stats:*
 
-!["Screenshot of URLs page"](/docs/urls-page.png)
+!["Screenshot of URLs page"](/docs/screenshot-urls-page.png)
 
 *Logged-in user view of Edit Short URL page with detailed visitor tracking stats:*
 
-!["Screenshot of URLs page"](/docs/edit-page.png)
+!["Screenshot of URLs page"](/docs/screenshot-edit-page.png)
 
 ## Purpose
 
