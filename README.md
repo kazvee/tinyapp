@@ -12,14 +12,17 @@ Say goodbye to incredibly long and boring website address links.
 Say *hello* to shareable shortlinks that leave plenty of room for your **_sass_**! 🤩  
 
 ## Final Product
-
-*Logged-in user view of saved short URLs:*
-
-!["Screenshot of URLs page"](/docs/urls-page.png)
-
 *View of New User Registration Page:*
 
 !["Screenshot of New User Registration page"](/docs/register-page.png)
+
+*Logged-in user view of saved short URLs with visitor tracking stats:*
+
+!["Screenshot of URLs page"](/docs/urls-page.png)
+
+*Logged-in user view of Edit Short URL page with detailed visitor tracking stats:*
+
+!["Screenshot of URLs page"](/docs/edit-page.png)
 
 ## Purpose
 
