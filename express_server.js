@@ -240,12 +240,6 @@ app.get('/u/:id', (req, res) => {
   res.redirect(longURL);
 });
 
-// Route for /urls.json endpoint, to help with route testing
-app.get('/urls.json', (req, res) => {
-  // Send urlDatabase object as a JSON response to the client
-  res.json(urlDatabase);
-});
-
 //=========
 //  /URLS
 //=========
