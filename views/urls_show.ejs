@@ -25,6 +25,7 @@
           Short URL ID: <a href="/u/<%= id %>"><%= id %></a>
         </p>
       </div>
+      <!-- Footer with Edit URL form -->
         <div class="card-footer text-muted">
           <form action="/urls/<%= id %>?_method=PUT" method="POST">
             <div class="form-group">
@@ -35,7 +36,51 @@
             </div>
           </form>
         </div>
-    
+
+        <!-- Card for URL visit tracking stats -->
+        <div class="d-flex justify-content-center">
+          <div class="card border-success mt-3 mb-3">
+            <div class="card-body text-success">
+              <h5 class="card-title">Visit Stats for /urls/<%= id %>
+              </h5>
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Total Visits
+                  <span class="badge badge-primary badge-pill">
+                    <%= urls[id].totalVisits %>
+                  </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Total Unique Visits
+                  <span class="badge badge-primary badge-pill">
+                    <%= urls[id].uniqueVisits %>
+                  </span>
+                </li>
+              </ul>
+            </div>
+            <div class="mb-3">
+              <ul class="list-group list-group-flush">
+                <% Object.entries(urls[id].visits).forEach(([visitorID, visit])=> { %>
+                  <li class="list-group-item py-3">
+                    <strong>
+                      <%= visitorID %>
+                    </strong>
+                    visited this link on
+                    <strong>
+                      <%= new Date(visit.timestamp).toLocaleDateString('en-US', { weekday: 'short' , month: 'short' ,
+                        day: 'numeric' , year: 'numeric' }) %>
+                    </strong>
+                    at
+                    <strong>
+                      <%= new Date(visit.timestamp).toLocaleTimeString() %>
+                    </strong>
+                  </li>
+                  <% }); %>
+              </ul>
+            </div>
+          </div>
+        </div>
+
     <!-- Bootstrap JS -->
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
