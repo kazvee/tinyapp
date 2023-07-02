@@ -14,19 +14,19 @@ Say *hello* to shareable shortlinks that leave plenty of room for your **_sass_*
 ## Final Product
 *View of New User Registration Page:*
 
-!["Screenshot of New User Registration page"](/docs/screenshot-register-page.png)
+!["Screenshot of New User Registration page"](/docs/register-page.png)
 
 *Logged-in user view of saved short URLs with visitor tracking stats:*
 
-!["Screenshot of URLs page"](/docs/screenshot-urls-page.png)
+!["Screenshot of URLs page"](/docs/urls-page.png)
 
 *Logged-in user view of Edit Short URL page with detailed visitor tracking stats:*
 
-!["Screenshot of URLs page"](/docs/screenshot-edit-page.png)
+!["Screenshot of URLs page"](/docs/edit-page.png)
 
 ## Purpose
 
-This project was created by [me](https://github.com/karvok) as part of my learnings at [Lighthouse Labs](https://www.lighthouselabs.ca/en/web-development-flex-program).
+This project was created by [me](https://github.com/kazvee) as part of my learnings at [Lighthouse Labs](https://www.lighthouselabs.ca/en/web-development-flex-program).
 
 ## Dependencies
 

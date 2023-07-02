@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/karvok/tinyapp.git"
+    "url": "git+https://github.com/kazvee/tinyapp.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/karvok/tinyapp/issues"
+    "url": "https://github.com/kazvee/tinyapp/issues"
   },
-  "homepage": "https://github.com/karvok/tinyapp#readme",
+  "homepage": "https://github.com/kazvee/tinyapp#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cookie-session": "^2.0.0",
